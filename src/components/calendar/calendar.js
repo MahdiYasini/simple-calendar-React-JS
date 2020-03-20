@@ -54,7 +54,7 @@ const useStyles = makeStyles({
 const findFirstDayOfMonth = (currentMonth, currentYear) => Number(moment(`${currentYear}-${currentMonth + 1}`, "YYYY-MM").startOf("month").format("d"));
 const findDaysInMonth = (currentMonth, currentYear) => moment(`${currentYear}-${currentMonth + 1}`, "YYYY-MM").daysInMonth()
 
-//TODO mainData = [currentMonth, currentYear, firstDayOfMonth, daysInMonth]
+//? mainData = [currentMonth, currentYear, firstDayOfMonth, daysInMonth]
 
 const Calendar = () => {
   const classes = useStyles();
