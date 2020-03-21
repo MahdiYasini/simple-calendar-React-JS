@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 import { createStore, combineReducers, compose } from "redux";
 
 
-import SelectDay from './store/reducers/SelectCountry';
+import SelectDay from './store/reducers/selectDay';
 
 const rootReducer = combineReducers({
     slDay: SelectDay
