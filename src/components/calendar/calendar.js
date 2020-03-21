@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import moment from 'moment';
+import { connect } from 'react-redux';
 import { makeStyles, Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import grey from '@material-ui/core/colors/grey';
+
+import * as actionCreators from '../../store/actions/index'
 
 const useStyles = makeStyles({
   table: {
@@ -48,6 +51,10 @@ const useStyles = makeStyles({
     color: " #f09819",
     padding: "0",
     margin: "1%",
+  },
+
+  ali: {
+    color: "blue"
   }
 });
 
@@ -56,7 +63,7 @@ const findDaysInMonth = (currentMonth, currentYear) => moment(`${currentYear}-${
 
 //? mainData = [currentMonth, currentYear, firstDayOfMonth, daysInMonth]
 
-const Calendar = () => {
+const Calendar = (props) => {
   const classes = useStyles();
 
   const [today] = useState(Number(moment().format("D")));
@@ -86,29 +93,21 @@ const Calendar = () => {
 
   const previousMonthHandler = () => {
     let newMainData = mainData.slice();
-
     if (newMainData[0] - 1 === -1) {
       newMainData[0] = 11;
       newMainData[1] = newMainData[1] - 1
-
-    }
-    else newMainData[0] = newMainData[0] - 1;
-
+    } else newMainData[0] = newMainData[0] - 1;
     newMainData[2] = findFirstDayOfMonth(newMainData[0], newMainData[1]);
     newMainData[3] = findDaysInMonth(newMainData[0], newMainData[1])
     setNewMainData(newMainData)
   };
 
-
   const nextMonthHandler = () => {
     let newMainData = mainData.slice();
-
     if (newMainData[0] + 1 === 12) {
       newMainData[0] = 0;
       newMainData[1] = newMainData[1] + 1
-    }
-    else newMainData[0] = newMainData[0] + 1;
-
+    } else newMainData[0] = newMainData[0] + 1;
     newMainData[2] = findFirstDayOfMonth(newMainData[0], newMainData[1]);
     newMainData[3] = findDaysInMonth(newMainData[0], newMainData[1])
     setNewMainData(newMainData)
@@ -129,6 +128,13 @@ const Calendar = () => {
     newMainData[3] = findDaysInMonth(newMainData[0], newMainData[1])
     setNewMainData(newMainData)
   };
+
+  const selectDayHandler = (day) => {
+    if(typeof day === 'number'){
+      console.log(day, typeof day, mainData[0], mainData[1])
+      props.onSetSelectDay([day ,mainData[0], mainData[1]])
+    } 
+  }
 
   return (
     <TableContainer
@@ -185,7 +191,15 @@ const Calendar = () => {
           {groupDays.map((groupDay, index) => (
             <TableRow key={`${index}groupDays`}>
               {groupDay.map((day, index) => {
-                return (today !== day || mainData[1] !== moment().year() || mainData[0] !== moment().month()) ? <TableCell key={`${day}${index}days`} className={classes.td}>{day}</TableCell > : <TableCell key={day} className={`${classes.today} ${classes.td}`}>{day}</TableCell >
+                return <TableCell
+                  key={`${day}${index}days`}
+                  className={`
+                    ${(typeof day === 'number') ? classes.td : ''} 
+                    ${(today === day && mainData[0] === moment().month() && mainData[1] === moment().year()) ? classes.today : ''}
+                    `}
+                  onClick={() => selectDayHandler(day)}>
+                  {day}
+                </TableCell >
               })}
             </TableRow >
           ))}
@@ -193,6 +207,20 @@ const Calendar = () => {
       </Table>
     </TableContainer>
   );
+};
+
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onSetSelectDay: (day) => dispatch(actionCreators.setSelectDay(day))
+  }
 }
 
-export default Calendar;
+const mapStateToProps = state => {
+  console.log('state', state)
+  return {
+    selectDay: state.slDay.selectedDay
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Calendar);
