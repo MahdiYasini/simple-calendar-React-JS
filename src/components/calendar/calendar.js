@@ -131,7 +131,6 @@ const Calendar = (props) => {
 
   const selectDayHandler = (day) => {
     if(typeof day === 'number'){
-      console.log(day, typeof day, mainData[0], mainData[1])
       props.onSetSelectDay([day ,mainData[0], mainData[1]])
     } 
   }
@@ -217,7 +216,6 @@ const mapDispatchToProps = dispatch => {
 }
 
 const mapStateToProps = state => {
-  console.log('state', state)
   return {
     selectDay: state.slDay.selectedDay
   }
