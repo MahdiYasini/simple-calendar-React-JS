@@ -1,5 +1,5 @@
 ## Pay attention:
-## If you live in my country (:heart:Iran:heart:), you have to use VPN.
+If you live in my country (:heart:Iran:heart:), you have to use VPN.
 ## For Testing:
 Click first day of April.
 
